@@ -1,5 +1,6 @@
 fastapi
-pydantic
+pydantic[email]
+email-validator
 uvicorn
 httpx
 pymongo
