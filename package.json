@@ -1,0 +1,25 @@
+{
+  "name": "techgear_p",
+  "version": "1.0.0",
+  "description": "Proyecto híbrido: FastAPI administra el catálogo y los pedidos con MongoDB, y Django será el portal web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coterahiguitafarid-cloud/Taller2Ap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/coterahiguitafarid-cloud/Taller2Ap/issues"
+  },
+  "homepage": "https://github.com/coterahiguitafarid-cloud/Taller2Ap#readme",
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "mongoose": "^9.11.4"
+  }
+}

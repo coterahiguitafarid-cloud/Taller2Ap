@@ -1,9 +1,12 @@
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    mongodb_uri: str
+    mongodb_uri: str = Field(
+        validation_alias=AliasChoices("MONGODB_URI", "MONGO_URI")
+    )
     mongodb_database: str = "techgear"
 
     model_config = SettingsConfigDict(
@@ -46,3 +49,9 @@ def get_database() -> AsyncIOMotorDatabase:
     if database is None:
         raise RuntimeError("La conexión con MongoDB no está inicializada.")
     return database
+
+
+def get_mongo_client() -> AsyncIOMotorClient:
+    if client is None:
+        raise RuntimeError("La conexión con MongoDB no está inicializada.")
+    return client

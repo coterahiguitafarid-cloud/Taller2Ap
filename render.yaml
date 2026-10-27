@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: techgear-api
+    runtime: python
+    buildCommand: pip install -r techgear_api/requirements.txt
+    startCommand: uvicorn techgear_api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DATABASE
+        value: techgear

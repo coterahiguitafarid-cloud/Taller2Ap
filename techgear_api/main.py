@@ -3,7 +3,9 @@ from collections.abc import AsyncIterator
 
 from fastapi import FastAPI
 
-from database import close_mongo_connection, connect_to_mongo
+from techgear_api.database import close_mongo_connection, connect_to_mongo
+from techgear_api.routers.orders import router as orders_router
+from techgear_api.routers.products import router as products_router
 
 
 @asynccontextmanager
@@ -21,6 +23,8 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+app.include_router(products_router)
+app.include_router(orders_router)
 
 
 @app.get("/health", tags=["Sistema"])
