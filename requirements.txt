@@ -1,8 +1,0 @@
-fastapi
-pydantic[email]
-email-validator
-uvicorn
-httpx
-pymongo
-Django>=6.1,<6.2
-PyJWT>=2.10,<3
