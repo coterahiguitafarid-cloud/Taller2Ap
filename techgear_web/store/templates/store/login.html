@@ -1,0 +1,13 @@
+{% extends "store/base.html" %}
+{% block title %}Ingresar | TechGear{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-md-6 col-lg-5">
+  <h1 class="h2 mb-4">Iniciar sesión</h1>
+  <form method="post" class="card card-body">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-rose" type="submit">Ingresar</button>
+  </form>
+  <p class="mt-3">¿Aún no tienes cuenta? <a href="{% url 'store:register' %}">Regístrate</a>.</p>
+</div></div>
+{% endblock %}

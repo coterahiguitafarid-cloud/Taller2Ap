@@ -1,0 +1,12 @@
+{% extends "store/base.html" %}
+{% block title %}Crear cuenta | TechGear{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-md-7 col-lg-6">
+  <h1 class="h2 mb-4">Crea tu cuenta</h1>
+  <form method="post" class="card card-body">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-rose" type="submit">Registrarme</button>
+  </form>
+</div></div>
+{% endblock %}

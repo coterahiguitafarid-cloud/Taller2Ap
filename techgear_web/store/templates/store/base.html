@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TechGear | Tecnología para ti{% endblock %}</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17283b;
+      --muted: #64748b;
+      --blue: #1769aa;
+      --blue-dark: #105184;
+      --surface: #f3f6fa;
+      --line: #dce4ed;
+      --white: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--surface);
+      color: var(--ink);
+      font: 16px/1.55 "Segoe UI", Arial, sans-serif;
+    }
+    a { color: var(--blue); }
+    .container { width: min(1120px, calc(100% - 36px)); margin-inline: auto; }
+    .navbar, .footer { background: #14283f; }
+    .navbar { color: var(--white); }
+    .navbar .container, .nav-links, .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .navbar .container { min-height: 72px; justify-content: space-between; }
+    .navbar-brand, .navbar .nav-link { color: var(--white); text-decoration: none; }
+    .navbar-brand { font-size: 1.4rem; font-weight: 750; letter-spacing: .02em; }
+    .nav-links { flex-wrap: wrap; gap: 18px; }
+    .nav-links a:hover { color: #b9dcff; }
+    .nav-actions form, .product-actions form, .table-actions form { margin: 0; }
+    main.container { min-height: 70vh; padding-block: 34px 54px; }
+    .hero {
+      padding: clamp(28px, 6vw, 58px);
+      border: 1px solid #d5e5f4;
+      border-radius: 22px;
+      background: linear-gradient(120deg, #dceeff, #f7faff 72%);
+      box-shadow: 0 12px 35px #14283f0d;
+    }
+    .hero-kicker { color: var(--blue); font-size: .78rem; font-weight: 750; letter-spacing: .12em; }
+    .hero h1 { max-width: 720px; margin: .4rem 0 .7rem; font-size: clamp(2.1rem, 5vw, 3.5rem); line-height: 1.08; }
+    .hero p { max-width: 650px; color: #46596f; font-size: 1.1rem; }
+    .section-heading, .page-heading, .toolbar, .table-actions, .product-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .section-heading, .page-heading { margin: 32px 0 18px; }
+    .section-heading h2, .page-heading h1 { margin: 0; }
+    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; }
+    .card, .product-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--white);
+      box-shadow: 0 8px 24px #14283f0a;
+    }
+    .product-card { min-height: 100%; }
+    .card-body { padding: 22px; }
+    .product-card .card-body { display: flex; flex-direction: column; align-items: flex-start; }
+    .product-card h3 { margin: 8px 0; font-size: 1.15rem; }
+    .product-card p { color: #526174; }
+    .product-card .product-description { flex: 1; }
+    .product-price { color: var(--ink) !important; font-size: 1.35rem; font-weight: 750; }
+    .badge { display: inline-block; border-radius: 999px; padding: 5px 11px; background: #e8f2fc; color: #17588c; font-size: .78rem; font-weight: 700; }
+    .btn {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      padding: 8px 15px;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-rose { background: var(--blue); color: var(--white); }
+    .btn-rose:hover { background: var(--blue-dark); color: var(--white); }
+    .btn-outline-light { border-color: #b9c9d8; background: transparent; color: var(--white); }
+    .btn-outline-secondary { border-color: #b9c5d2; background: var(--white); color: var(--ink); }
+    .btn-outline-primary { border-color: #8dbbe2; background: var(--white); color: var(--blue); }
+    .btn-outline-danger { border-color: #e7a9a9; background: var(--white); color: #a52e37; }
+    .btn:disabled { cursor: not-allowed; opacity: .6; }
+    input, select, textarea {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 9px 11px;
+      background: var(--white);
+      color: var(--ink);
+      font: inherit;
+    }
+    input[type="hidden"] { display: none; }
+    input[type="number"] { max-width: 100px; }
+    label { display: block; margin: 10px 0 5px; font-weight: 600; }
+    form p { margin: 0 0 14px; }
+    .text-secondary, small { color: var(--muted); }
+    .text-center { text-align: center; }
+    .alert { margin: 0 0 20px; border: 1px solid #cfe0ee; border-radius: 10px; padding: 14px 18px; background: #eaf4fc; color: #18476a; }
+    .alert-warning { border-color: #efd59a; background: #fff8df; color: #694d08; }
+    .alert-error, .alert-danger { border-color: #efb8b8; background: #fff0f0; color: #842b2b; }
+    .table-responsive { overflow-x: auto; border-radius: 12px; }
+    .table { width: 100%; border-collapse: collapse; background: var(--white); }
+    .table th, .table td { border-bottom: 1px solid var(--line); padding: 13px 15px; text-align: left; }
+    .table th { background: #edf3f8; }
+    .table-striped tbody tr:nth-child(even) { background: #f8fafc; }
+    .footer { padding: 20px; color: var(--white); text-align: center; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+    .nav-actions form button { white-space: nowrap; }
+    .messages { padding: 0; list-style: none; }
+    .errorlist { color: #a52e37; }
+    @media (max-width: 700px) {
+      .navbar .container, .section-heading, .page-heading, .toolbar { align-items: flex-start; flex-direction: column; }
+      .navbar .container { padding-block: 14px; gap: 10px; }
+      .nav-links { gap: 12px; }
+      .section-heading form, .toolbar form { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{% url 'store:product_list' %}">TechGear</a>
+      <div class="nav-links">
+        <a class="nav-link" href="{% url 'store:product_list' %}">Tienda</a>
+        <a class="nav-link" href="{% url 'store:cart' %}">Carrito</a>
+        {% if user.is_authenticated %}
+          <a class="nav-link" href="{% url 'store:orders' %}">Mis pedidos</a>
+          {% if user.is_staff %}<a class="nav-link" href="{% url 'store:admin_products' %}">Administrar</a>{% endif %}
+          <span class="nav-link">Hola, {{ user.username }}</span>
+          <form method="post" action="{% url 'store:logout' %}">
+            {% csrf_token %}<button class="btn btn-sm btn-outline-light" type="submit">Salir</button>
+          </form>
+        {% else %}
+          <a class="nav-link" href="{% url 'store:login' %}">Ingresar</a>
+          <a class="btn btn-sm btn-rose" href="{% url 'store:register' %}">Crear cuenta</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  <main class="container py-4">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+        {{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+      </div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer text-white text-center py-3 mt-5">TechGear · Tecnología para tu día a día</footer>
+</body>
+</html>

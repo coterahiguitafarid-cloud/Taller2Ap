@@ -1,118 +1,74 @@
-# t1_pyapif
-# Cliente CLI para la API de aprendices
+# TechGear
 
-Este proyecto incluye una API FastAPI y un cliente de consola para consultar y
-administrar aprendices.
+Proyecto de tienda en línea: FastAPI administra productos y pedidos en MongoDB,
+y Django ofrece el portal web.
 
-## Requisitos
+## Componentes
 
-- Python instalado
-- Dependencias del proyecto instaladas con `pip install -r requirements.txt`
-- MongoDB configurado para el proyecto
+- `techgear_api/`: API FastAPI para productos y pedidos.
+- `techgear_web/`: portal Django con catálogo, carrito, cuentas y administración.
+- `src/` y `catalogo/`: API CLI y catálogo de vehículos del proyecto original.
 
-## Iniciar la API
+## Ejecutar la API
 
-Desde la carpeta raíz del proyecto, abre una terminal y ejecuta:
-
-```powershell
-python -m uvicorn src.main:app --reload
-```
-
-La API estará disponible en `http://127.0.0.1:8000`. La documentación
-interactiva está en `http://127.0.0.1:8000/docs`.
-
-## Usar el CLI
-
-Abre otra terminal en la carpeta raíz del proyecto. Para ver los comandos:
+Desde la raíz, crea un entorno e instala las dependencias:
 
 ```powershell
-python -m src.views.view --help
+python -m venv .venv-api
+.\.venv-api\Scripts\Activate.ps1
+pip install -r techgear_api\requirements.txt
 ```
 
-### Listar aprendices
+Configura MongoDB en un archivo `.env` en la raíz (no lo subas a Git):
+
+```dotenv
+MONGODB_URI=mongodb+srv://<usuario>:<contraseña>@<cluster>/
+MONGODB_DATABASE=techgear
+TECHGEAR_API_TOKEN=<token-privado>
+```
+
+Inicia la API desde la raíz:
 
 ```powershell
-python -m src.views.view list
+uvicorn techgear_api.main:app --reload --port 8000
 ```
 
-### Consultar un aprendiz
+La documentación de la API está en `http://127.0.0.1:8000/docs`.
+
+## Ejecutar el portal web
+
+En otra terminal, desde la raíz, crea un entorno independiente:
 
 ```powershell
-python -m src.views.view get ID_DEL_APRENDIZ
+python -m venv .venv-web
+.\.venv-web\Scripts\Activate.ps1
+pip install -r techgear_web\requirements.txt
+python techgear_web\manage.py migrate
+python techgear_web\manage.py runserver 8001
 ```
 
-### Crear un aprendiz
+Abre `http://127.0.0.1:8001/`. El catálogo obtiene el inventario de FastAPI;
+inicia primero la API para ver productos. El portal también puede abrirse sin
+la API, aunque mostrará un aviso de conexión y no inventará productos de muestra.
+Las acciones administrativas requieren que `TECHGEAR_API_TOKEN` coincida en
+ambos servicios.
+
+## Despliegue de la API
+
+`render.yaml` configura el servicio FastAPI y la comprobación `/health`. En
+Render, configura `MONGODB_URI` y `TECHGEAR_API_TOKEN` como variables secretas.
+`MONGODB_DATABASE` usa `techgear` de forma predeterminada.
+
+## Proyecto original
+
+El código de `src/` contiene el cliente CLI para la API de aprendices. La app
+Django `catalogo` mantiene por separado el catálogo de vehículos en SQLite.
+Sus comandos de administración y pruebas se ejecutan desde la raíz:
 
 ```powershell
-python -m src.views.view create --document "123456" --first-name "Ana" --last-name "Lopez" --email "ana@example.com" --age 22 --program "Desarrollo de software" --record-number 1001
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py seed_vehicles
+python manage.py test catalogo
+python manage.py runserver
 ```
-
-### Actualizar un aprendiz
-
-Indica el ID y al menos un campo:
-
-```powershell
-python -m src.views.view update ID_DEL_APRENDIZ --program "Análisis de software"
-```
-
-También puedes actualizar varios campos a la vez:
-
-```powershell
-python -m src.views.view update ID_DEL_APRENDIZ --first-name "Ana Maria" --age 23
-```
-
-### Eliminar un aprendiz
-
-```powershell
-python -m src.views.view delete ID_DEL_APRENDIZ
-```
-
-## Configurar otra dirección de API
-
-Por defecto, el cliente usa `http://127.0.0.1:8000`. Para usar otra dirección
-en PowerShell, configura la variable antes de ejecutar el CLI:
-
-```powershell
-$env:API_BASE_URL = "http://localhost:8000"
-```
-
-La variable solo aplica a la sesión actual de esa terminal.
-
-## Catálogo web de carros y motos
-
-La app Django `catalogo` ofrece un inventario de vehículos guardado en SQLite,
-independiente de la API FastAPI y su colección MongoDB. La interfaz usa
-Bootstrap 5.3 para diseño adaptable e incluye filtros por tipo y marca,
-publicación y edición de vehículos, además de registro e inicio de sesión con
-JWT. Los datos de aprendices existentes se conservan.
-
-En PowerShell, desde la raíz del proyecto:
-
-```powershell
-.\venv\Scripts\python.exe -m pip install -r requirements.txt
-.\venv\Scripts\python.exe manage.py makemigrations catalogo
-.\venv\Scripts\python.exe manage.py migrate
-.\venv\Scripts\python.exe manage.py seed_vehicles
-.\venv\Scripts\python.exe manage.py test catalogo
-.\venv\Scripts\python.exe manage.py runserver
-```
-
-Abre `http://127.0.0.1:8000/` para explorar el inventario público. El comando
-`seed_vehicles` agrega vehículos de demostración de Porsche, Ducati y Triumph
-sin duplicarlos; puedes omitirlo si vas a cargar tus propios vehículos. Para
-publicar, editar o eliminar inventario, crea una cuenta e inicia sesión. Las
-imágenes de muestra y Bootstrap se cargan desde CDN y necesitan conexión a
-internet.
-
-### Endpoints JWT
-
-- `POST /api/token/`: recibe `{"username": "...", "password": "..."}` y devuelve
-  un token de acceso.
-- `POST /api/usuarios/`: registra una cuenta y devuelve un token.
-- `GET /api/usuarios/me/`: devuelve el usuario autenticado.
-- `GET /api/usuarios/`: lista usuarios y requiere un token de un administrador.
-
-Para llamadas API, envía el token con `Authorization: Bearer <token>`. Los
-tokens duran 30 minutos. En desarrollo Django genera una clave secreta al
-iniciar; define `DJANGO_SECRET_KEY` en el entorno si necesitas conservar tokens
-entre reinicios. No uses `DEBUG=True` ni la clave de desarrollo en producción.
