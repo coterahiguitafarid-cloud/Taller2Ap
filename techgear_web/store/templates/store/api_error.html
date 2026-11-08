@@ -1,9 +1,9 @@
 {% extends "store/base.html" %}
-{% block title %}Servicio no disponible | TechGear{% endblock %}
+{% block title %}Servicio no disponible | TcnoCO{% endblock %}
 {% block content %}
 <div class="alert alert-warning">
-  <h1 class="h4">No se pudo completar la solicitud</h1>
-  <p class="mb-0">{{ error }}</p>
+  <h1>No se pudo completar la solicitud</h1>
+  <p>{{ error }}</p>
 </div>
-<a class="btn btn-outline-secondary" href="{% url 'store:product_list' %}">Volver a la tienda</a>
+<a class="button button-secondary" href="{% url 'store:product_list' %}">Volver a la tienda</a>
 {% endblock %}

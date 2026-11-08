@@ -55,15 +55,17 @@ def get_product(product_id: str) -> dict[str, Any]:
 
 
 def create_product(data: dict[str, Any]) -> dict[str, Any]:
-    return api_request("POST", "/api/products", authenticated=True, json=data)
+    payload = {**data, "price": str(data["price"])}
+    return api_request("POST", "/api/products", authenticated=True, json=payload)
 
 
 def update_product(product_id: str, data: dict[str, Any]) -> dict[str, Any]:
+    payload = {**data, "price": str(data["price"])}
     return api_request(
         "PUT",
         f"/api/products/{product_id}",
         authenticated=True,
-        json=data,
+        json=payload,
     )
 
 

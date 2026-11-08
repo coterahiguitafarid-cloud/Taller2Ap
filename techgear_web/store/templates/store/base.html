@@ -1,9 +1,12 @@
+{% load static %}
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}TechGear | Tecnología para ti{% endblock %}</title>
+  <meta name="theme-color" content="#14283f">
+  <link rel="icon" type="image/svg+xml" href="{% static 'store/images/technoco-icon.svg' %}">
+  <title>{% block title %}TcnoCO | Tecnología para ti{% endblock %}</title>
   <style>
     :root {
       color-scheme: light;
@@ -14,30 +17,39 @@
       --surface: #f3f6fa;
       --line: #dce4ed;
       --white: #fff;
+      --danger: #a52e37;
     }
     * { box-sizing: border-box; }
     body {
+      min-height: 100vh;
       margin: 0;
+      display: flex;
+      flex-direction: column;
       background: var(--surface);
       color: var(--ink);
       font: 16px/1.55 "Segoe UI", Arial, sans-serif;
     }
     a { color: var(--blue); }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid #8dbbe2;
+      outline-offset: 2px;
+    }
     .container { width: min(1120px, calc(100% - 36px)); margin-inline: auto; }
-    .navbar, .footer { background: #14283f; }
-    .navbar { color: var(--white); }
-    .navbar .container, .nav-links, .nav-actions {
+    .site-header, .site-footer { background: #14283f; color: var(--white); }
+    .header-content, .navigation, .button-row, .inline-actions, .page-heading, .section-heading, .toolbar, .order-heading {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
-    .navbar .container { min-height: 72px; justify-content: space-between; }
-    .navbar-brand, .navbar .nav-link { color: var(--white); text-decoration: none; }
-    .navbar-brand { font-size: 1.4rem; font-weight: 750; letter-spacing: .02em; }
-    .nav-links { flex-wrap: wrap; gap: 18px; }
-    .nav-links a:hover { color: #b9dcff; }
-    .nav-actions form, .product-actions form, .table-actions form { margin: 0; }
-    main.container { min-height: 70vh; padding-block: 34px 54px; }
+    .header-content { min-height: 72px; justify-content: space-between; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--white); font-size: 1.4rem; font-weight: 750; letter-spacing: .02em; text-decoration: none; }
+    .brand-icon { width: 38px; height: 38px; border-radius: 10px; }
+    .navigation { flex-wrap: wrap; gap: 18px; }
+    .navigation a { color: var(--white); text-decoration: none; }
+    .navigation a:hover { color: #b9dcff; }
+    .navigation form, .inline-actions form { margin: 0; }
+    .site-main { flex: 1; padding-block: 34px 54px; }
+    .site-footer { padding: 18px; text-align: center; }
     .hero {
       padding: clamp(28px, 6vw, 58px);
       border: 1px solid #d5e5f4;
@@ -46,32 +58,37 @@
       box-shadow: 0 12px 35px #14283f0d;
     }
     .hero-kicker { color: var(--blue); font-size: .78rem; font-weight: 750; letter-spacing: .12em; }
-    .hero h1 { max-width: 720px; margin: .4rem 0 .7rem; font-size: clamp(2.1rem, 5vw, 3.5rem); line-height: 1.08; }
-    .hero p { max-width: 650px; color: #46596f; font-size: 1.1rem; }
-    .section-heading, .page-heading, .toolbar, .table-actions, .product-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .section-heading, .page-heading { margin: 32px 0 18px; }
-    .section-heading h2, .page-heading h1 { margin: 0; }
-    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; }
-    .card, .product-card {
+    .hero-title { max-width: 720px; margin: .4rem 0 .7rem; font-size: clamp(2.1rem, 5vw, 3.5rem); line-height: 1.08; }
+    .hero-copy { max-width: 650px; color: #46596f; font-size: 1.1rem; }
+    .page-heading, .section-heading { justify-content: space-between; margin: 32px 0 18px; }
+    .page-heading h1, .section-heading h2 { margin: 0; }
+    .page-title { margin: 0 0 20px; font-size: clamp(1.7rem, 4vw, 2.2rem); }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 20px; }
+    .product-card, .panel, .order-card {
+      overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 16px;
       background: var(--white);
       box-shadow: 0 8px 24px #14283f0a;
     }
-    .product-card { min-height: 100%; }
-    .card-body { padding: 22px; }
-    .product-card .card-body { display: flex; flex-direction: column; align-items: flex-start; }
-    .product-card h3 { margin: 8px 0; font-size: 1.15rem; }
-    .product-card p { color: #526174; }
-    .product-card .product-description { flex: 1; }
-    .product-price { color: var(--ink) !important; font-size: 1.35rem; font-weight: 750; }
+    .product-card { display: flex; flex-direction: column; min-width: 0; }
+    .product-image, .product-image-placeholder {
+      display: grid;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      place-items: center;
+      background: #e8eef5;
+    }
+    .product-image { object-fit: cover; }
+    .product-image-placeholder { color: var(--muted); font-size: .9rem; }
+    .admin-product-image { display: block; width: 76px; aspect-ratio: 1; border-radius: 8px; background: #e8eef5; object-fit: cover; }
+    .panel-body, .product-details, .order-body { padding: 22px; }
+    .product-details { display: flex; flex: 1; flex-direction: column; align-items: flex-start; }
+    .product-name { margin: 8px 0; font-size: 1.15rem; }
+    .product-description { flex: 1; color: #526174; }
+    .product-price { color: var(--ink); font-size: 1.35rem; font-weight: 750; }
     .badge { display: inline-block; border-radius: 999px; padding: 5px 11px; background: #e8f2fc; color: #17588c; font-size: .78rem; font-weight: 700; }
-    .btn {
+    .button {
       display: inline-flex;
       min-height: 42px;
       align-items: center;
@@ -79,18 +96,20 @@
       border: 1px solid transparent;
       border-radius: 9px;
       padding: 8px 15px;
+      background: var(--white);
+      color: var(--ink);
       font: inherit;
       font-weight: 650;
+      text-align: center;
       text-decoration: none;
       cursor: pointer;
     }
-    .btn-rose { background: var(--blue); color: var(--white); }
-    .btn-rose:hover { background: var(--blue-dark); color: var(--white); }
-    .btn-outline-light { border-color: #b9c9d8; background: transparent; color: var(--white); }
-    .btn-outline-secondary { border-color: #b9c5d2; background: var(--white); color: var(--ink); }
-    .btn-outline-primary { border-color: #8dbbe2; background: var(--white); color: var(--blue); }
-    .btn-outline-danger { border-color: #e7a9a9; background: var(--white); color: #a52e37; }
-    .btn:disabled { cursor: not-allowed; opacity: .6; }
+    .button-primary { background: var(--blue); color: var(--white); }
+    .button-primary:hover { background: var(--blue-dark); color: var(--white); }
+    .button-light { border-color: #b9c9d8; background: transparent; color: var(--white); }
+    .button-secondary { border-color: #b9c5d2; }
+    .button-danger { border-color: #e7a9a9; color: var(--danger); }
+    .button:disabled { cursor: not-allowed; opacity: .6; }
     input, select, textarea {
       width: 100%;
       min-height: 42px;
@@ -105,58 +124,78 @@
     input[type="number"] { max-width: 100px; }
     label { display: block; margin: 10px 0 5px; font-weight: 600; }
     form p { margin: 0 0 14px; }
-    .text-secondary, small { color: var(--muted); }
-    .text-center { text-align: center; }
-    .alert { margin: 0 0 20px; border: 1px solid #cfe0ee; border-radius: 10px; padding: 14px 18px; background: #eaf4fc; color: #18476a; }
-    .alert-warning { border-color: #efd59a; background: #fff8df; color: #694d08; }
-    .alert-error, .alert-danger { border-color: #efb8b8; background: #fff0f0; color: #842b2b; }
-    .table-responsive { overflow-x: auto; border-radius: 12px; }
-    .table { width: 100%; border-collapse: collapse; background: var(--white); }
-    .table th, .table td { border-bottom: 1px solid var(--line); padding: 13px 15px; text-align: left; }
-    .table th { background: #edf3f8; }
-    .table-striped tbody tr:nth-child(even) { background: #f8fafc; }
-    .footer { padding: 20px; color: var(--white); text-align: center; }
-    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
-    .nav-actions form button { white-space: nowrap; }
+    .form-panel { width: min(100%, 680px); margin-inline: auto; }
+    .form-panel-narrow { width: min(100%, 480px); }
+    .field-help, .muted, small { color: var(--muted); }
+    .field-help { display: block; margin-top: 4px; font-size: .9rem; }
+    .product-image-preview { display: block; width: min(100%, 360px); aspect-ratio: 4 / 3; margin: 0 0 18px; border-radius: 12px; background: #e8eef5; object-fit: cover; }
+    .button-row, .inline-actions { flex-wrap: wrap; }
+    .quantity-form { display: flex; width: 100%; gap: 10px; align-items: center; }
+    .quantity-form input { flex: 0 0 88px; }
+    .stock-note { margin: 8px 0 0; color: var(--muted); font-size: .9rem; }
+    .filter-form { display: flex; align-items: center; gap: 10px; }
+    .filter-form select { min-width: 200px; }
+    .alert, .message { margin: 0 0 20px; border: 1px solid #cfe0ee; border-radius: 10px; padding: 14px 18px; background: #eaf4fc; color: #18476a; }
+    .alert p:last-child { margin-bottom: 0; }
+    .alert-warning, .message-warning { border-color: #efd59a; background: #fff8df; color: #694d08; }
+    .message-error, .form-errors { border-color: #efb8b8; background: #fff0f0; color: #842b2b; }
+    .message-success { border-color: #b6dfc5; background: #effaf2; color: #205b35; }
     .messages { padding: 0; list-style: none; }
-    .errorlist { color: #a52e37; }
+    .errorlist { color: var(--danger); }
+    .table-scroll { overflow-x: auto; border-radius: 12px; }
+    .data-table { width: 100%; border-collapse: collapse; background: var(--white); }
+    .data-table th, .data-table td { border-bottom: 1px solid var(--line); padding: 13px 15px; text-align: left; }
+    .data-table th { background: #edf3f8; }
+    .data-table tbody tr:nth-child(even) { background: #f8fafc; }
+    .order-card { margin-bottom: 16px; }
+    .order-heading { justify-content: space-between; flex-wrap: wrap; }
+    .order-heading h2 { margin: 0; font-size: 1.1rem; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+    .empty-state { grid-column: 1 / -1; }
     @media (max-width: 700px) {
-      .navbar .container, .section-heading, .page-heading, .toolbar { align-items: flex-start; flex-direction: column; }
-      .navbar .container { padding-block: 14px; gap: 10px; }
-      .nav-links { gap: 12px; }
-      .section-heading form, .toolbar form { width: 100%; }
+      .header-content, .page-heading, .section-heading { align-items: flex-start; flex-direction: column; }
+      .header-content { padding-block: 14px; gap: 10px; }
+      .navigation { gap: 12px; }
+      .filter-form { width: 100%; }
+      .filter-form select { min-width: 0; flex: 1; }
+      .site-main { padding-top: 24px; }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="{% url 'store:product_list' %}">TechGear</a>
-      <div class="nav-links">
-        <a class="nav-link" href="{% url 'store:product_list' %}">Tienda</a>
-        <a class="nav-link" href="{% url 'store:cart' %}">Carrito</a>
+  <header class="site-header">
+    <div class="container header-content">
+      <a class="brand" href="{% url 'store:product_list' %}">
+        <img class="brand-icon" src="{% static 'store/images/technoco-icon.svg' %}" alt="">
+        <span>TcnoCO</span>
+      </a>
+      <nav class="navigation" aria-label="Navegación principal">
+        <a href="{% url 'store:product_list' %}">Tienda</a>
+        <a href="{% url 'store:cart' %}">Carrito</a>
         {% if user.is_authenticated %}
-          <a class="nav-link" href="{% url 'store:orders' %}">Mis pedidos</a>
-          {% if user.is_staff %}<a class="nav-link" href="{% url 'store:admin_products' %}">Administrar</a>{% endif %}
-          <span class="nav-link">Hola, {{ user.username }}</span>
+          <a href="{% url 'store:orders' %}">Mis pedidos</a>
+          {% if user.is_staff %}<a href="{% url 'store:admin_products' %}">Administrar</a>{% endif %}
+          <span>Hola, {{ user.username }}</span>
           <form method="post" action="{% url 'store:logout' %}">
-            {% csrf_token %}<button class="btn btn-sm btn-outline-light" type="submit">Salir</button>
+            {% csrf_token %}<button class="button button-light" type="submit">Salir</button>
           </form>
         {% else %}
-          <a class="nav-link" href="{% url 'store:login' %}">Ingresar</a>
-          <a class="btn btn-sm btn-rose" href="{% url 'store:register' %}">Crear cuenta</a>
+          <a href="{% url 'store:login' %}">Ingresar</a>
+          <a class="button button-primary" href="{% url 'store:register' %}">Crear cuenta</a>
         {% endif %}
-      </div>
+      </nav>
     </div>
-  </nav>
-  <main class="container py-4">
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
-        {{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-      </div>
-    {% endfor %}
+  </header>
+  <main class="container site-main">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="message message-{{ message.tags }}" role="status">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
     {% block content %}{% endblock %}
   </main>
-  <footer class="footer text-white text-center py-3 mt-5">TechGear · Tecnología para tu día a día</footer>
+  <footer class="site-footer">TcnoCO · Tecnología para tu día a día</footer>
 </body>
 </html>

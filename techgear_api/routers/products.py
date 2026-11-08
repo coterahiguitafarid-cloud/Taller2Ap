@@ -27,6 +27,7 @@ def serialize_product(document: dict) -> Product:
         category=document["category"],
         price=price,
         stock=document["stock"],
+        image_url=document.get("image_url"),
         created_at=document["created_at"],
     )
 
@@ -34,6 +35,8 @@ def serialize_product(document: dict) -> Product:
 def product_document(product: ProductCreate) -> dict:
     document = product.model_dump()
     document["price"] = Decimal128(str(document["price"]))
+    if document["image_url"] is not None:
+        document["image_url"] = str(document["image_url"])
     return document
 
 

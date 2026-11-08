@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from enum import Enum
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
 
 
 class ProductCreate(BaseModel):
@@ -11,6 +11,7 @@ class ProductCreate(BaseModel):
     category: str = Field(min_length=1, max_length=80)
     price: Decimal = Field(gt=0, max_digits=10, decimal_places=2)
     stock: int = Field(ge=0)
+    image_url: HttpUrl | None = None
 
 
 class Product(ProductCreate):

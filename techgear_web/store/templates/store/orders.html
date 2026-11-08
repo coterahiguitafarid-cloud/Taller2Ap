@@ -1,14 +1,14 @@
 {% extends "store/base.html" %}
-{% block title %}Mis pedidos | TechGear{% endblock %}
+{% block title %}Mis pedidos | TcnoCO{% endblock %}
 {% block content %}
-<h1 class="h2 mb-4">Mis pedidos</h1>
+<h1 class="page-title">Mis pedidos</h1>
 {% for order in orders %}
-  <article class="card mb-3"><div class="card-body">
-    <div class="d-flex justify-content-between flex-wrap gap-2">
-      <h2 class="h5">Pedido {{ order.id }}</h2><span class="badge text-bg-secondary">{{ order.status }}</span>
+  <article class="order-card"><div class="order-body">
+    <div class="order-heading">
+      <h2>Pedido {{ order.id }}</h2><span class="badge">{{ order.status }}</span>
     </div>
-    <small class="text-secondary">{{ order.created_at }}</small>
-    <ul class="mt-3">
+    <small class="muted">{{ order.created_at }}</small>
+    <ul>
       {% for item in order.items %}
         <li>{{ item.product_name }} × {{ item.quantity }} — ${{ item.unit_price }}</li>
       {% endfor %}
@@ -16,6 +16,6 @@
     <strong>Total: ${{ order.total }}</strong>
   </div></article>
 {% empty %}
-  <p class="alert alert-info">Todavía no tienes pedidos.</p>
+  <p class="alert">Todavía no tienes pedidos.</p>
 {% endfor %}
 {% endblock %}

@@ -37,6 +37,14 @@ class ProductForm(forms.Form):
         label="Precio",
     )
     stock = forms.IntegerField(min_value=0, label="Existencias")
+    image_url = forms.URLField(
+        required=False,
+        label="URL de la imagen",
+        help_text="Opcional. Pega el enlace directo a una imagen, por ejemplo https://ejemplo.com/producto.jpg.",
+    )
+
+    def clean_image_url(self) -> str | None:
+        return self.cleaned_data["image_url"] or None
 
 
 class CartQuantityForm(forms.Form):

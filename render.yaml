@@ -8,5 +8,39 @@ services:
     envVars:
       - key: MONGODB_URI
         sync: false
+      - key: TECHGEAR_API_TOKEN
+        sync: false
       - key: MONGODB_DATABASE
         value: techgear
+  - type: web
+    name: technoco-web
+    runtime: python
+    plan: free
+    buildCommand: pip install -r techgear_web/requirements.txt && python techgear_web/manage.py collectstatic --noinput
+    startCommand: cd techgear_web && python manage.py migrate --noinput && gunicorn techgear_web.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_ALLOWED_HOSTS
+        value: technoco-web.onrender.com
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        value: https://technoco-web.onrender.com
+      - key: FASTAPI_BASE_URL
+        value: https://techgear-api.onrender.com
+      - key: TECHGEAR_API_TOKEN
+        fromService:
+          type: web
+          name: techgear-api
+          envVarKey: TECHGEAR_API_TOKEN
+      - key: DATABASE_URL
+        fromDatabase:
+          name: technoco-db
+          property: connectionString
+
+databases:
+  - name: technoco-db
+    databaseName: technoco
+    user: technoco
+    plan: free

@@ -1,15 +1,18 @@
 {% extends "store/base.html" %}
-{% block title %}{{ title }} | TechGear{% endblock %}
+{% block title %}{{ title }} | TcnoCO{% endblock %}
 {% block content %}
-<div class="row justify-content-center"><div class="col-lg-8">
-  <h1 class="h2 mb-4">{{ title }}</h1>
-  <form method="post" class="card card-body">
+<section class="form-panel">
+  <h1 class="page-title">{{ title }}</h1>
+  <form method="post" class="panel panel-body">
     {% csrf_token %}
     {{ form.as_p }}
-    <div class="d-flex gap-2">
-      <button class="btn btn-rose" type="submit">Guardar</button>
-      <a class="btn btn-outline-secondary" href="{% url 'store:admin_products' %}">Cancelar</a>
+    {% if form.image_url.value %}
+      <img class="product-image-preview" src="{{ form.image_url.value }}" alt="Vista previa de la imagen del producto">
+    {% endif %}
+    <div class="button-row">
+      <button class="button button-primary" type="submit">Guardar</button>
+      <a class="button button-secondary" href="{% url 'store:admin_products' %}">Cancelar</a>
     </div>
   </form>
-</div></div>
+</section>
 {% endblock %}

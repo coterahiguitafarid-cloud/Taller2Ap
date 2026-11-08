@@ -1,9 +1,9 @@
 {% extends "store/base.html" %}
-{% block title %}Carrito | TechGear{% endblock %}
+{% block title %}Carrito | TcnoCO{% endblock %}
 {% block content %}
-<h1 class="h2 mb-4">Tu carrito</h1>
+<h1 class="page-title">Tu carrito</h1>
 {% if items %}
-  <div class="table-responsive"><table class="table align-middle bg-white">
+  <div class="table-scroll"><table class="data-table">
     <thead><tr><th>Producto</th><th>Cantidad</th><th>Subtotal</th><th></th></tr></thead>
     <tbody>
       {% for item in items %}
@@ -11,7 +11,7 @@
           <td>{{ item.product.name }}</td><td>{{ item.quantity }}</td>
           <td>${{ item.subtotal|floatformat:2 }}</td>
           <td><form method="post" action="{% url 'store:remove_from_cart' item.product.id %}">
-            {% csrf_token %}<button class="btn btn-sm btn-outline-danger" type="submit">Quitar</button>
+            {% csrf_token %}<button class="button button-danger" type="submit">Quitar</button>
           </form></td>
         </tr>
       {% endfor %}
@@ -20,13 +20,13 @@
   <form method="post" action="{% url 'store:checkout' %}">
     {% csrf_token %}
     {% if user.is_authenticated %}
-      <button class="btn btn-rose" type="submit">Confirmar pedido</button>
+      <button class="button button-primary" type="submit">Confirmar pedido</button>
     {% else %}
-      <a class="btn btn-rose" href="{% url 'store:login' %}?next={% url 'store:cart' %}">Inicia sesión para continuar</a>
+      <a class="button button-primary" href="{% url 'store:login' %}?next={% url 'store:cart' %}">Inicia sesión para continuar</a>
     {% endif %}
   </form>
 {% else %}
-  <p class="alert alert-info">Tu carrito está vacío.</p>
-  <a class="btn btn-rose" href="{% url 'store:product_list' %}">Explorar productos</a>
+  <p class="alert">Tu carrito está vacío.</p>
+  <a class="button button-primary" href="{% url 'store:product_list' %}">Explorar productos</a>
 {% endif %}
 {% endblock %}
