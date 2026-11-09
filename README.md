@@ -22,9 +22,10 @@ y realizar compras. Los datos del catálogo se almacenan en MongoDB.
 techgear_api/
   auth.py                 Autenticación del portal a la API
   database.py             Configuración y conexión a MongoDB
-  main.py                 Aplicación FastAPI y health check
+  main.py                 Aplicación FastAPI, ruta raíz y health check
   models.py               Esquemas y validaciones
   routers/                Endpoints de productos y pedidos
+  requirements.txt        Dependencias exclusivas de la API
 techgear_web/
   store/
     forms.py              Formularios de usuario, carrito y productos
@@ -38,8 +39,8 @@ src/                      Cliente CLI del proyecto original
 catalogo/                 Catálogo de vehículos del proyecto original
 test/                     Pruebas de FastAPI
 render.yaml               Configuración de despliegue de la API
-vercel.json                Punto de entrada y rutas de FastAPI para Vercel
-requirements.txt           Dependencias Python detectadas por Vercel
+pyproject.toml             Punto de entrada FastAPI para Vercel
+requirements.txt           Referencia a dependencias de techgear_api/
 ```
 
 ## 🚀 Instalación y ejecución local
@@ -76,11 +77,12 @@ check en `http://127.0.0.1:8000/health`.
 ### Desplegar la API en Vercel
 
 Configura el directorio raíz del proyecto en Vercel como la raíz del repositorio.
-`vercel.json` configura `techgear_api/main.py` como función Python y dirige las
-rutas a FastAPI. Sus dependencias se instalan desde el `requirements.txt` de la
-raíz. En la configuración de entorno de Vercel agrega `MONGODB_URI`,
-`MONGODB_DATABASE` (por ejemplo, `techgear`) y `TECHGEAR_API_TOKEN`. No guardes
-estos valores en el repositorio.
+`pyproject.toml` define `techgear_api.main:app` como punto de entrada y el
+`requirements.txt` de la raíz incluye las dependencias de la API. En Vercel usa
+el preset `Other`, sin Build Command ni Output Directory personalizados. En la
+configuración de entorno agrega `MONGODB_URI`, `MONGODB_DATABASE` (por ejemplo,
+`techgear`) y `TECHGEAR_API_TOKEN`. No guardes estos valores en el repositorio.
+Los endpoints incluyen `/`, `/health`, `/docs`, `/api/products` y `/api/orders`.
 
 ### 2. Configurar y ejecutar Django
 

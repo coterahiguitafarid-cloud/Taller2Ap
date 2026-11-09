@@ -1,8 +1,1 @@
-fastapi
-pydantic[email]
-email-validator
-uvicorn
-httpx
-pymongo
-motor
-pydantic-settings
+-r techgear_api/requirements.txt

@@ -1,0 +1,2 @@
+[tool.vercel]
+entrypoint = "techgear_api.main:app"
