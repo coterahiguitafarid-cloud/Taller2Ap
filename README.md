@@ -14,7 +14,7 @@ y realizar compras. Los datos del catálogo se almacenan en MongoDB.
 | Comunicación web/API | HTTP con Requests y token Bearer entre servicios |
 | Base de datos local del portal | SQLite |
 | Pruebas | `unittest` y Django TestCase |
-| Despliegue de la API | Render |
+| Despliegue de la API | Vercel y Render |
 
 ## 📁 Estructura del proyecto
 
@@ -38,6 +38,8 @@ src/                      Cliente CLI del proyecto original
 catalogo/                 Catálogo de vehículos del proyecto original
 test/                     Pruebas de FastAPI
 render.yaml               Configuración de despliegue de la API
+pyproject.toml             Punto de entrada FastAPI para Vercel
+requirements.txt           Dependencias Python detectadas por Vercel
 ```
 
 ## 🚀 Instalación y ejecución local
@@ -70,6 +72,14 @@ uvicorn techgear_api.main:app --reload --port 8000
 
 La documentación interactiva estará en `http://127.0.0.1:8000/docs` y el health
 check en `http://127.0.0.1:8000/health`.
+
+### Desplegar la API en Vercel
+
+Configura el directorio raíz del proyecto en Vercel como la raíz del repositorio.
+El punto de entrada de FastAPI está declarado en `pyproject.toml` y sus
+dependencias se instalan desde `requirements.txt`. En la configuración de
+entorno de Vercel agrega `MONGODB_URI`, `MONGODB_DATABASE` (por ejemplo,
+`techgear`) y `TECHGEAR_API_TOKEN`. No guardes estos valores en el repositorio.
 
 ### 2. Configurar y ejecutar Django
 

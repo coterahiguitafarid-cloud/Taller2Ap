@@ -4,5 +4,7 @@ email-validator
 uvicorn
 httpx
 pymongo
+motor
+pydantic-settings
 Django>=6.1,<6.2
 PyJWT>=2.10,<3

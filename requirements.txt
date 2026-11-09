@@ -1,0 +1,1 @@
+-r techgear_api/requirements.txt
