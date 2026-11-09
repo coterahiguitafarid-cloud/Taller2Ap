@@ -27,6 +27,11 @@ app.include_router(products_router)
 app.include_router(orders_router)
 
 
+@app.get("/", tags=["Sistema"])
+async def root() -> dict[str, str]:
+    return {"message": "¡API de TechGear funcionando correctamente!"}
+
+
 @app.get("/health", tags=["Sistema"])
 async def health_check() -> dict[str, str]:
     return {"status": "ok"}
