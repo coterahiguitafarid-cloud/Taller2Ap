@@ -1,2 +1,14 @@
 [tool.vercel]
 entrypoint = "main:app"
+[project]
+name = "taller2ap"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "motor",
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv",
+]
