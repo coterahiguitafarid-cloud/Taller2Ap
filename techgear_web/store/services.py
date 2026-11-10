@@ -43,7 +43,10 @@ def api_request(method: str, path: str, *, authenticated: bool = False, **kwargs
     try:
         return response.json()
     except ValueError as exc:
-        raise StoreAPIError("La API devolvió una respuesta inválida.") from exc
+        raise StoreAPIError(
+            f"La API devolvió una respuesta inválida (código {response.status_code}, "
+            f"tipo {response.headers.get('content-type')}): {response.text[:200]}"
+        ) from exc
 
 
 def list_products() -> list[dict[str, Any]]:
