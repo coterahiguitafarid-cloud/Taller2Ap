@@ -26,6 +26,7 @@ techgear_api/
   models.py               Esquemas y validaciones
   routers/                Endpoints de productos y pedidos
   requirements.txt        Dependencias exclusivas de la API
+main.py                   Entry point raíz para Vercel (reexporta FastAPI)
 techgear_web/
   store/
     forms.py              Formularios de usuario, carrito y productos
@@ -40,7 +41,7 @@ catalogo/                 Catálogo de vehículos del proyecto original
 test/                     Pruebas de FastAPI
 render.yaml               Configuración de despliegue de la API
 pyproject.toml             Punto de entrada FastAPI para Vercel
-requirements.txt           Referencia a dependencias de techgear_api/
+requirements.txt           Dependencias Python para desplegar FastAPI
 ```
 
 ## 🚀 Instalación y ejecución local
@@ -77,11 +78,13 @@ check en `http://127.0.0.1:8000/health`.
 ### Desplegar la API en Vercel
 
 Configura el directorio raíz del proyecto en Vercel como la raíz del repositorio.
-`pyproject.toml` define `techgear_api.main:app` como punto de entrada y el
-`requirements.txt` de la raíz incluye las dependencias de la API. En Vercel usa
-el preset `Other`, sin Build Command ni Output Directory personalizados. En la
-configuración de entorno agrega `MONGODB_URI`, `MONGODB_DATABASE` (por ejemplo,
-`techgear`) y `TECHGEAR_API_TOKEN`. No guardes estos valores en el repositorio.
+`main.py` de la raíz reexporta la aplicación y `pyproject.toml` define
+`main:app` como punto de entrada. El `requirements.txt` de la raíz contiene las
+dependencias de FastAPI. `techgear_api/requirements.txt` mantiene las
+dependencias del entorno local de la API. En Vercel usa el preset `Other`, sin
+Build Command ni Output Directory personalizados. En la configuración de
+entorno agrega `MONGODB_URI`, `MONGODB_DATABASE` (por ejemplo, `techgear`) y
+`TECHGEAR_API_TOKEN`. No guardes estos valores en el repositorio.
 Los endpoints incluyen `/`, `/health`, `/docs`, `/api/products` y `/api/orders`.
 
 ### 2. Configurar y ejecutar Django

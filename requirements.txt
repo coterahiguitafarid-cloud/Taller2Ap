@@ -1,1 +1,7 @@
--r techgear_api/requirements.txt
+fastapi
+pydantic[email]
+uvicorn
+pymongo
+motor
+pydantic-settings
+python-dotenv
